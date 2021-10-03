@@ -61,6 +61,21 @@ end;
 /
 
 -- SP BUSCAR USUARIO POR RUT
+-- retorna datos del usuario si es que encuentra uno
+create or replace procedure sp_usuario_por_rut(rut in varchar, cur_user out sys_refcursor)
+is begin
+    open cur_user for select numrut, dvrut,
+            pnombre, snombre, apepat, apemat,
+            fec_nac, correo,
+            telefono_movil, telefono_fijo,
+            genero, pais, tipo
+        from usuario join genero using(id_genero)
+        join pais using(id_pais)
+        join tipo_usuario using(id_tipo)
+        where numrut = rut;
+end;
+
+/
 
 -- SP BUSCAR USUARIO POR TIPO
 

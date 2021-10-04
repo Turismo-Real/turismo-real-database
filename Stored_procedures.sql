@@ -38,50 +38,7 @@ end;
 
 /
 
--- SP AGREGAR USUARIO
-create or replace procedure sp_agregar_usuario(
-    rut in varchar, dv in varchar, pnombre in varchar, snombre in varchar,
-    apepat in varchar, apemat in varchar, fecnac in date, email in varchar,
-    telmovil in varchar, telfijo in varchar, pass in varchar,
-    genero in varchar, pais in varchar, tipo in varchar
-) is 
-    id_genero integer;
-    id_pais integer;
-    id_tipo integer;
-begin
-    id_genero := fn_obten_id_genero(genero);
-    id_pais := fn_obten_id_pais(pais);
-    id_tipo := fn_obten_id_tipo(tipo);
-
-    
-
-
-end;
-
-/
-
--- SP BUSCAR USUARIO POR RUT
--- retorna datos del usuario si es que encuentra uno
-create or replace procedure sp_usuario_por_rut(rut in varchar, cur_user out sys_refcursor)
-is begin
-    open cur_user for select numrut, dvrut,
-            pnombre, snombre, apepat, apemat,
-            fec_nac, correo,
-            telefono_movil, telefono_fijo,
-            genero, pais, tipo
-        from usuario join genero using(id_genero)
-        join pais using(id_pais)
-        join tipo_usuario using(id_tipo)
-        where numrut = rut;
-end;
-
-/
-
 -- SP BUSCAR USUARIO POR TIPO
-
--- SP EDITAR USUARIO
-
--- SP ELIMINAR USUARIO
 
 -- SP OBTEN REGIONES
 create or replace procedure sp_obten_regiones(regiones out cursor)

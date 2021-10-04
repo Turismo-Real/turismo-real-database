@@ -14,21 +14,10 @@ begin
     else
         existe := true;
     end if;
+exception
+    when no_data_found then existe := false;
+    when others then existe := false;
 end;
 
-/
 
 -- SP BUSCAR USUARIO POR TIPO
-
--- SP OBTEN REGIONES
-create or replace procedure sp_obten_regiones(regiones out cursor)
-is begin
-
-end;
-
-
--- SP OBTEN COMUNAS POR REGION
-create or replace procedure sp_obten_comuna_por_region(region in varchar, comunas out cursor)
-is begin 
-
-end;

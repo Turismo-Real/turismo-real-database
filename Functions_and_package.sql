@@ -1,39 +1,46 @@
 -- FN OBTENER ID GENERO
-create or replace function fn_obten_id_genero(genero varchar) return integer
-is 
-    id_genero integer := 0;
+create or replace function fn_obten_id_genero(genero_in in varchar)
+return number is 
+    idgenero number := 0;
 begin
-    select g.id_genero into id_genero
+    select g.id_genero into idgenero
     from genero g
-    where upper(g.genero) = upper(genero);
+    where upper(g.genero) = upper(genero_in);
 
-    return id_genero; 
+    return idgenero; 
+
+exception
+    when no_data_found then return 0;
 end;
 
 /
 
 -- FN OBTENER ID PAIS
-create or replace function fn_obten_id_pais(pais varchar) return integer
-is 
-    id_pais integer := 0;
+create or replace function fn_obten_id_pais(nombre_pais varchar)
+return number is 
+    pais_id integer := 0;
 begin
-    select p.id_pais into id_pais
+    select p.id_pais into pais_id
     from pais p
-    where upper(p.pais) = upper(pais);
+    where upper(p.pais) = upper(nombre_pais);
 
-    return id_pais;
+    return pais_id;
+exception
+    when no_data_found then return 0;
 end;
 
 /
 
 -- FN OBTENER TIPO USUARIO
-create or replace function fn_obten_id_tipo(tipo varchar) return integer
-is 
-    id_tipo integer := 0;
+create or replace function fn_obten_id_tipo_usuario(tipo_u varchar)
+return number is
+    tipo_id integer := 0;
 begin
-    select t.id_tipo into id_tipo
+    select t.id_tipo into tipo_id
     from tipo_usuario t
-    where upper(t.tipo) = upper(tipo);
+    where upper(t.tipo) = upper(tipo_u);
 
-    return id_tipo;
+    return tipo_id;
+exception
+    when no_data_found then return 0;
 end;

@@ -94,6 +94,21 @@ begin
 end;
 
 -- FN OBTENER ID PAIS
+declare
+    id_pais integer;
+    pais varchar2(100);
+begin
+    pais := 'Chile';
+    id_pais := fn_obten_id_pais(pais);
+    dbms_output.put_line('ID PAIS: '||id_pais);
+end;
 
 -- FN OBTENER ID TIPO USUARIO
-
+declare
+    id_tipo integer;
+    tipo varchar2(50);
+begin
+    tipo := 'cliente';
+    id_tipo := fn_obten_id_tipo_usuario(tipo);
+    dbms_output.put_line('ID TIPO USUARIO: '||id_tipo);
+end;

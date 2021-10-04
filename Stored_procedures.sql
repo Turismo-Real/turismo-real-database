@@ -18,26 +18,6 @@ end;
 
 /
 
--- SP LOGIN
---  true cuando la combinación correo y password existe
---  false cuando la combinación no existe
-create or replace procedure sp_login(email in varchar, pass in varchar, login out boolean)
-is
-    cantidad number := 0;
-begin
-    select count(*) into cantidad
-    from usuario u
-    where u.correo = email and u.password = pass;
-
-    if cantidad = 0 then
-        login := false;
-    else 
-        login := true;
-    end if;
-end;
-
-/
-
 -- SP BUSCAR USUARIO POR TIPO
 
 -- SP OBTEN REGIONES

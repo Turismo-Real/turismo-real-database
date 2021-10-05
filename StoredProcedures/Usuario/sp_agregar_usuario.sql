@@ -6,7 +6,7 @@ create or replace procedure sp_agregar_usuario(
     snombre_u in varchar,
     apepat_u in varchar,
     apemat_u in varchar,
-    fecnac_u in date,
+    fecnac_u in varchar,
     email_u in varchar,
     telmovil_u in varchar,
     telfijo_u in varchar,
@@ -18,15 +18,17 @@ create or replace procedure sp_agregar_usuario(
     genero_id number;
     pais_id number;
     tipo_id number;
+    fecha_nac date;
 begin
     genero_id := fn_obten_id_genero(genero_u);
     pais_id := fn_obten_id_pais(pais_u);
     tipo_id := fn_obten_id_tipo_usuario(tipo_u);
+    fecha_nac := to_date(fecnac_u, 'dd/mm/yyyy');
 
 -- todo: insert exceptions
 
     insert into usuario(numrut,dvrut,pnombre,snombre,apepat,apemat,fec_nac,correo,telefono_movil,telefono_fijo,password,id_genero,id_pais,id_tipo)
-    values(rut_u,dv_u,pnombre_u,snombre_u,apepat_u,apemat_u,fecnac_u,email_u,telmovil_u,telfijo_u,pass_u,genero_id,pais_id,tipo_id);
+    values(rut_u,dv_u,pnombre_u,snombre_u,apepat_u,apemat_u,fecha_nac,email_u,telmovil_u,telfijo_u,pass_u,genero_id,pais_id,tipo_id);
     commit;
 end;
 

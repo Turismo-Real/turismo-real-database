@@ -23,7 +23,7 @@ end;
 
 -- PRUEBA SP
 declare
-    login boolean;
+    login number;
     emailOK varchar2(100);
     passOK varchar2(255);
     emailBAD varchar2(100);
@@ -36,7 +36,7 @@ begin
     
     sp_login(emailOK, passBAD, login);
     
-    if login = true then
+    if login = 1 then
         dbms_output.put_line('true');
     else
         dbms_output.put_line('false');

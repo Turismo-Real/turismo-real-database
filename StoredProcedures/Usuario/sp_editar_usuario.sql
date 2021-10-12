@@ -1,4 +1,4 @@
--- SP MODIFICAR USUARIO
+-- SP EDITAR USUARIO
 create or replace procedure sp_editar_usuario(
     rut_u in varchar,
     dv_u in varchar,
@@ -14,15 +14,22 @@ create or replace procedure sp_editar_usuario(
     genero_u in varchar,
     pais_u in varchar,
     tipo_u in varchar,
+    comuna_u in varchar,
+    calle_u in varchar,
+    numero_u in varchar,
+    depto_u in varchar,
+    casa_u in varchar,
     updated out boolean
 ) is
     genero_id number;
     pais_id number;
     tipo_id number;
+    comuna_id number;
 begin
     genero_id := fn_obten_id_genero(genero_u);
     pais_id := fn_obten_id_pais(pais_u);
     tipo_id := fn_obten_id_tipo_usuario(tipo_u);
+    comuna_id := fn_obten_id_comuna(comuna_u);
 
     update usuario
     	set numrut = rut_u,
@@ -40,6 +47,15 @@ begin
         	id_pais = pais_id,
         	id_tipo = tipo_id
         where numrut = rut_u;
+
+    update direccion
+        set id_comuna = comuna_id,
+            calle = calle_u,
+            numero = numero_u,
+            depto = depto_u,
+            casa = casa_u
+        where numrut = rut_u;
+
     updated := true;
 exception
     when others then
@@ -54,7 +70,7 @@ declare
     updated boolean;
 begin
     rut_editar_user := '15624572';
-    sp_editar_usuario(rut_editar_user,'0','Andrea','Fernanda','Espinoza','Vergara','21/09/89','a.fernan@correo.com','+56911234458','+56288884444','1c42f9c1ca2f65441465b43cd9339d6c','femenino','España','Administrador',updated);
+    sp_editar_usuario(rut_editar_user,'0','Andrea','Fernanda','Espinoza','Vergara','21/09/89','a.fernan@correo.com','+56911234458','+56288884444','1c42f9c1ca2f65441465b43cd9339d6c','femenino','España','Administrador','providencia','Eliodoro Yañez','2435',null,'21A',updated);
     
     if updated = true then
         dbms_output.put_line('Usuario Actualizado.');

@@ -1,7 +1,7 @@
 -- SP LOGIN
 --  true cuando la combinación correo y password existe
 --  false cuando la combinación no existe
-create or replace procedure sp_login(email in varchar, pass in varchar, login out boolean)
+create or replace procedure sp_login(email in varchar, pass in varchar, login out number)
 is
     cantidad number := 0;
 begin
@@ -10,13 +10,13 @@ begin
     where u.correo = email and u.password = pass;
 
     if cantidad = 0 then
-        login := false;
+        login := 0;
     else 
-        login := true;
+        login := 1;
     end if;
 exception
-    when no_data_found then login := false;
-    when others then login := false;
+    when no_data_found then login := 0;
+    when others then login := 0;
 end;
 
 /

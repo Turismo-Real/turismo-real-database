@@ -23,6 +23,6 @@ Para conectarse a Oracle 11g Docker desde SQL developer se deben utilizar las si
   
 ---
 ## Orden de ejecución de scripts  
-1. En el usuario `system` ejecutar el script de creación de usuario ubicado en el archivo `1. creacion_seleccion.sql`.  
+1. En el usuario `system` ejecutar el script de creación de usuario ubicado en el archivo `1. creacion_usuario.sql`.  
 2. Conectarse al usuario `turismo_real` con contraseña `portafolio` y ejecutar el script de creación de tablas y poblado ubicado en el archivo `2. script_turismo_real.sql`.  
 3. Ejecutar el script de creación de funciones y procedimientos almacenados ubicado en el archivo `3. turismo_real_objects.sql`.  

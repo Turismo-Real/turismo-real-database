@@ -1,4 +1,4 @@
--- FN OBTEN ID TIPO DEPTO
+-- FN OBTEN ID ESTADO DEPTO
 create or replace function fn_obten_id_estado_depto(estado_d in varchar)
 return number is 
     estado_id integer := 0;

@@ -196,7 +196,7 @@ create or replace procedure sp_editar_usuario(
     numero_u in varchar,
     depto_u in varchar,
     casa_u in varchar,
-    updated out boolean
+    updated out number
 ) is
     genero_id number;
     pais_id number;
@@ -209,9 +209,7 @@ begin
     comuna_id := fn_obten_id_comuna(comuna_u);
 
     update usuario
-    	set numrut = rut_u,
-        	dvrut = dv_u,
-        	pnombre = pnombre_u,
+    	set pnombre = pnombre_u,
         	snombre = snombre_u,
         	apepat = apepat_u,
         	apemat = apemat_u,
@@ -233,10 +231,10 @@ begin
             casa = casa_u
         where numrut = rut_u;
 
-    updated := true;
+    updated := 1;
 exception
     when others then
-        updated := false;
+        updated := 0;
 end;
 
 /

@@ -7,33 +7,49 @@ create or replace procedure sp_agregar_depto(
     superficie_d in number,
     valor_diario_d in number,
     tipo_d in varchar,
-    saved out boolean
+    comuna_d in varchar,
+    calle_d in varchar,
+    numero_d in varchar,
+    depto_d in varchar,
+    saved out number
 )
 is
+    comuna_id number;
     tipo_id number := 0;
-    estado_id number; 
+    estado_id number;
+    depto_id number;
 begin
+    comuna_id := fn_obten_id_comuna(comuna_d);
     tipo_id := fn_obten_id_tipo_depto(tipo_d);
-    estado_id := fn_obten_id_estado_depto('En espera'); -- default
+    -- ESTADO POR DEFECTO
+    estado_id := fn_obten_id_estado_depto('Cargado');
+    depto_id := seq_departamento.nextval;
 
+    -- INGRESAR DEPARTAMENTO
     insert into departamento(id_departamento,rol,dormitorio,banios,descripcion,superficie,valor_diario,id_tipo,id_estado)
-        values(seq_departamento.nextval,rol_d,dormitorios_d,banios_d,descripcion_d,superficie_d,valor_diario_d,tipo_id,estado_id);
-    saved := true;
+        values(depto_id,rol_d,dormitorios_d,banios_d,descripcion_d,superficie_d,valor_diario_d,tipo_id,estado_id);    
+    
+    -- INGRESAR DIRECCION
+    insert into direccion(id_direccion,id_departamento,numrut,id_comuna,calle,numero,depto)
+        values(seq_direccion.nextval,depto_id,null,comuna_id,calle_d,numero_d,depto_d);
+
+    -- RETORNA EL ID DEL DEPARTAMENTO
+    saved := depto_id;
     commit;
 
 exception when others then
-    saved := false;
+    saved := 0;
+    rollback;
 end;
 
 -- PRUEBA SP
 declare
-    saved boolean;
+    saved number;
 begin
-    sp_agregar_depto('023-455',3,2,'Descripcion de prueba a', 90,70000,'NORmal',saved);
-    --sp_agregar_depto('026-456',4,2,'Descripcion de prueba b', 130,180000,'duPLEX',saved);
-    --sp_agregar_depto('029-459',2,1,'Descripcion de prueba c', 110,120000,'ESTudiO',saved);
+    sp_agregar_depto('023-458',3,2,'Descripcion de prueba Y',90,70000,'NORmal','La reina','Santa anita','223','22',saved);
     
-    if saved = true then
+    dbms_output.put_line('ID DEPTO: '||saved);
+    if saved > 0 then
         dbms_output.put_line('true');
     else
         dbms_output.put_line('false');

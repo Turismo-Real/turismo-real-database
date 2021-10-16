@@ -16,6 +16,7 @@ drop procedure sp_usuario_por_rut;
 drop procedure sp_obten_comuna_por_region;
 drop procedure sp_obten_regiones;
 drop procedure sp_login;
+drop procedure sp_agregar_depto;
 
 /
 

@@ -381,24 +381,22 @@ end;
 /
 
 -- SP LOGIN
---  true cuando la combinación correo y password existe
---  false cuando la combinación no existe
-create or replace procedure sp_login(email in varchar, pass in varchar, login out number)
-is
-    cantidad number := 0;
+create or replace procedure sp_login(
+    email_u in varchar2, 
+    pass_u in varchar2, 
+    tipo_u out varchar2
+) is 
+    tipo_usuario varchar2(50) := 'ERROR';
 begin
-    select count(*) into cantidad
-    from usuario u
-    where u.correo = email and u.password = pass;
-
-    if cantidad = 0 then
-        login := 0;
-    else 
-        login := 1;
-    end if;
+    select 
+        tipo into tipo_usuario
+    from usuario join tipo_usuario using(id_tipo)
+    where upper(correo) = upper(email_u) and upper(password) = upper(pass_u);
+    
+    tipo_u := tipo_usuario;
 exception
-    when no_data_found then login := 0;
-    when others then login := 0;
+    when no_data_found then tipo_u := tipo_usuario;
+    when others then tipo_u := tipo_usuario;
 end;
 
 /

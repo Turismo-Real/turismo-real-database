@@ -255,17 +255,23 @@ end;
 
 -- SP ELIMINAR USUARIO
 create or replace procedure sp_eliminar_usuario(usuario_id in number, removed out number)
-is begin
-    delete from usuario
+is
+    verify_id number;
+begin
+    select id_usuario into verify_id
+    from usuario
     where id_usuario = usuario_id;
 
+    delete from usuario
+    where id_usuario = verify_id;
+
     commit;
-    removed := 1;
+    removed := 1; -- ELIMINADO
 exception
     when no_data_found then
-        removed := 0;
+        removed := -1; -- NO EXISTE USUARIO
     when others then
-        removed := 0;
+        removed := 0; -- ERROR AL ELIMINAR
 end;
 
 

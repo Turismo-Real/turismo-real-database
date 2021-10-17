@@ -8,6 +8,7 @@ drop function fn_obten_id_pais;
 drop function fn_obten_id_tipo_depto;
 drop function fn_obten_id_tipo_usuario;
 drop function fn_obten_id_instalacion;
+drop function fn_agregar_instalacion;
 
 drop procedure sp_agregar_usuario;
 drop procedure sp_editar_usuario;
@@ -139,6 +140,24 @@ exception
         return instalacion_id;
     when others then
         return instalacion_id;
+end;
+
+/
+
+create or replace function fn_agregar_instalacion(instalacion in varchar)
+return number
+is
+    instalacion_id turismo_real.instalacion.id_instalacion%type;
+begin
+    instalacion_id := seq_instalacion.nextval;
+
+    insert into instalacion(id_instalacion, instalacion)
+        values(instalacion_id, initcap(instalacion));
+    commit;
+    return instalacion_id;
+exception
+    when others then
+        instalacion_id := 0;
 end;
 
 /

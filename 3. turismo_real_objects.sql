@@ -263,12 +263,11 @@ is begin
     removed := 1;
 exception
     when no_data_found then
-        rollback;
         removed := 0;
     when others then
-        rollback;
         removed := 0;
 end;
+
 
 /
 

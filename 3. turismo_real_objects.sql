@@ -430,6 +430,24 @@ end;
 
 /
 
+-- SP OBTEN DEPTO POR ID
+create or replace procedure sp_obten_depto_por_id(depto_id in number, depto out sys_refcursor)
+is begin
+    open depto for
+        select
+            id_departamento, rol, dormitorio, banios, descripcion,
+            superficie, valor_diario, tipo_departamento, estado,
+            region, comuna, calle, numero, depto
+        from departamento join direccion using(id_departamento)
+        join comuna using(id_comuna)
+        join region using(id_region)
+        join tipo_departamento using(id_tipo)
+        join estado_depto using(id_estado)
+        where id_departamento = depto_id;
+end;
+
+/
+
 ---------------------------------
 -- ###### COMUNA - REGION #######
 ---------------------------------

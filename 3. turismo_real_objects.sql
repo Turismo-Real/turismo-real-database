@@ -7,6 +7,7 @@ drop function fn_obten_id_genero;
 drop function fn_obten_id_pais;
 drop function fn_obten_id_tipo_depto;
 drop function fn_obten_id_tipo_usuario;
+drop function fn_obten_id_instalacion;
 
 drop procedure sp_agregar_usuario;
 drop procedure sp_editar_usuario;
@@ -118,6 +119,26 @@ begin
     return tipo_id;
 exception
     when no_data_found then return 0;
+end;
+
+/
+
+-- FN OBTEN ID INSTALACION
+create or replace function fn_obten_id_instalacion(instalacion_d in varchar)
+return number
+is
+    instalacion_id number := 0;
+begin
+    select id_instalacion into instalacion_id
+    from instalacion
+    where upper(instalacion) = upper(instalacion_d);
+    
+    return instalacion_id;
+exception
+    when no_data_found then
+        return instalacion_id;
+    when others then
+        return instalacion_id;
 end;
 
 /

@@ -482,6 +482,7 @@ end;
 
 /
 
+-- SP AGREGAR INSTALACION
 create or replace procedure sp_agregar_instalaciones(
     depto_id in number,
     instalacion_d in varchar,
@@ -513,6 +514,19 @@ exception
         success_sp := -1; -- no existe depto
     when others then
         success_sp := 0; -- error al agregar
+end;
+
+/
+
+-- SP OBTEN INSTALACIONES POR ID
+create or replace procedure sp_obten_instalaciones(depto_id in number, instalaciones out sys_refcursor)
+is begin
+    open instalaciones for
+        select instalacion
+        from departamento join instalacion_departamento using(id_departamento)
+        join instalacion using(id_instalacion)
+        where id_departamento = 6
+        order by instalacion;
 end;
 
 /

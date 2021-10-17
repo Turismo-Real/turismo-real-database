@@ -5,7 +5,7 @@ is begin
         select instalacion
         from departamento join instalacion_departamento using(id_departamento)
         join instalacion using(id_instalacion)
-        where id_departamento = 6
+        where id_departamento = depto_id
         order by instalacion;
 end;
 
@@ -26,5 +26,4 @@ begin
         dbms_output.put_line(instalacion);
     end loop;
     close instalaciones;
-    
 end;

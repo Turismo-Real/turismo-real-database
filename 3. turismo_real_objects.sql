@@ -20,6 +20,7 @@ drop procedure sp_obten_regiones;
 drop procedure sp_login;
 drop procedure sp_agregar_depto;
 drop procedure sp_agregar_instalaciones;
+drop procedure sp_obten_instalaciones;
 
 /
 
@@ -525,7 +526,7 @@ is begin
         select instalacion
         from departamento join instalacion_departamento using(id_departamento)
         join instalacion using(id_instalacion)
-        where id_departamento = 6
+        where id_departamento = depto_id
         order by instalacion;
 end;
 

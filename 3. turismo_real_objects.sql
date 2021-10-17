@@ -411,6 +411,24 @@ end;
 
 /
 
+-- SP OBTEN DEPARTAMENTOS
+create or replace procedure sp_obten_deptos(deptos out sys_refcursor)
+is begin
+    open deptos for
+        select
+            id_departamento, rol, dormitorio, banios, descripcion,
+            superficie, valor_diario, tipo_departamento, estado,
+            region, comuna, calle, numero, depto
+        from departamento join direccion using(id_departamento)
+        join comuna using(id_comuna)
+        join region using(id_region)
+        join tipo_departamento using(id_tipo)
+        join estado_depto using(id_estado)
+        order by id_departamento;
+end;
+
+/
+
 ---------------------------------
 -- ###### COMUNA - REGION #######
 ---------------------------------

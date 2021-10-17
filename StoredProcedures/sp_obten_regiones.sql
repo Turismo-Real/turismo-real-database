@@ -1,8 +1,7 @@
 -- SP OBTEN REGIONES
 create or replace procedure sp_obten_regiones(regiones out sys_refcursor)
 is begin
-    open regiones for select r.region
-        from region r;
+    open regiones for select region from region;
 end;
 
 -- PRUEBA SP

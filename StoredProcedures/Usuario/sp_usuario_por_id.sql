@@ -1,8 +1,9 @@
--- SP OBTEN USUARIOS
-create or replace procedure sp_obten_usuarios(usuarios out sys_refcursor)
+-- SP BUSCAR USUARIO POR ID
+create or replace procedure sp_usuario_por_id(usuario_id in number, cur_user out sys_refcursor)
 is begin
-    open usuarios for
-        select id_usuario, pasaporte, numrut, dvrut,
+    open cur_user for 
+        select
+            id_usuario, pasaporte, numrut, dvrut,
             pnombre, snombre, apepat, apemat,
             fec_nac, correo,
             telefono_movil, telefono_fijo,
@@ -14,13 +15,16 @@ is begin
         join direccion using(id_usuario)
         join comuna using(id_comuna)
         join region using(id_region)
-        order by id_usuario;
+        where id_usuario = usuario_id;
 end;
+
+/
 
 -- PRUEBA SP
 declare
     type ref_cur is ref cursor;
     c_usuario ref_cur;
+    id_entrada number;
     usuario_id turismo_real.usuario.id_usuario%type;
     pasaporte turismo_real.usuario.pasaporte%type;
     numrut turismo_real.usuario.numrut%type;
@@ -43,11 +47,12 @@ declare
     depto turismo_real.direccion.depto%type;
     casa turismo_real.direccion.casa%type;
 begin
-    sp_obten_usuarios(c_usuario);
+    id_entrada := 3;
+    sp_usuario_por_id(id_entrada, c_usuario);
 
-    loop fetch c_usuario into usuario_id,pasaporte,numrut,dvrut,pnombre,snombre,apepat,apemat,
-        fec_nac,correo,telefono_movil,telefono_fijo,genero,pais,tipo,
-        region,comuna,calle,numero,depto,casa;
+    loop fetch c_usuario into usuario_id, pasaporte, numrut, dvrut, pnombre, snombre, apepat, apemat,
+            fec_nac, correo, telefono_movil, telefono_fijo, genero, pais, tipo,
+            region, comuna, calle, numero, depto, casa;
         exit when c_usuario%notfound;
 
         dbms_output.put_line('ID: '||usuario_id);
@@ -60,15 +65,12 @@ begin
         dbms_output.put_line('Telefono Movil: '||telefono_movil);
         dbms_output.put_line('Genero: '||genero);
         dbms_output.put_line('Pais: '||pais);
-        dbms_output.put_line('Perfil: '||tipo);
         dbms_output.put_line('Region: '||region);
         dbms_output.put_line('Comuna: '||comuna);
         dbms_output.put_line('Calle: '||calle);
         dbms_output.put_line('Numero: '||numero);
         dbms_output.put_line('Depto: '||depto);
         dbms_output.put_line('Casa: '||casa);
-        dbms_output.put_line('-----------------------------');
-        dbms_output.put_line('');
     end loop;
     close c_usuario;
 end;

@@ -1,5 +1,7 @@
 -- SP EDITAR USUARIO
 create or replace procedure sp_editar_usuario(
+    usuario_id in number,
+    pasaporte_u in varchar,
     rut_u in varchar,
     dv_u in varchar,
     pnombre_u in varchar,
@@ -19,7 +21,7 @@ create or replace procedure sp_editar_usuario(
     numero_u in varchar,
     depto_u in varchar,
     casa_u in varchar,
-    updated out number
+    updated out number -- retorna el id del usuario
 ) is
     genero_id number;
     pais_id number;
@@ -32,7 +34,11 @@ begin
     comuna_id := fn_obten_id_comuna(comuna_u);
 
     update usuario
-    	set pnombre = pnombre_u,
+    	set 
+            pasaporte = pasaporte_u,
+            numrut = rut_u,
+            dvrut = dv_u,
+            pnombre = pnombre_u,
         	snombre = snombre_u,
         	apepat = apepat_u,
         	apemat = apemat_u,
@@ -44,7 +50,7 @@ begin
         	id_genero = genero_id,
         	id_pais = pais_id,
         	id_tipo = tipo_id
-        where numrut = rut_u;
+        where id_usuario = usuario_id;
 
     update direccion
         set id_comuna = comuna_id,
@@ -52,9 +58,10 @@ begin
             numero = numero_u,
             depto = depto_u,
             casa = casa_u
-        where numrut = rut_u;
+        where id_usuario = usuario_id;
 
-    updated := 1;
+    commit;
+    updated := usuario_id;
 exception
     when others then
         updated := 0;
@@ -64,13 +71,13 @@ end;
 
 -- PRUEBA SP
 declare
-    rut_editar_user varchar2(8);
-    updated boolean;
+    id_usuario turismo_real.usuario.id_usuario%type;
+    updated number;
 begin
-    rut_editar_user := '15624572';
-    sp_editar_usuario(rut_editar_user,'0','Andrea','Fernanda','Espinoza','Vergara','21/09/89','a.fernan@correo.com','+56911234458','+56288884444','1c42f9c1ca2f65441465b43cd9339d6c','femenino','España','Administrador','providencia','Eliodoro Yañez','2435',null,'21A',updated);
-    
-    if updated = true then
+    id_usuario := 6;
+    sp_editar_usuario(id_usuario,'154256545',null,null,'Sharon','Clementine','Mclean','Mendoza','06/04/1989','s.clementine@gmail.com','+56911112222',null,'a2d5331ede0bc483554aa325a7f498c902ba61828d0cd1ca1892f2c2f289b403','femeNINO','Argentina','clienTE','sin comunA','Los Dolares','1999',null,'25B',updated);
+
+    if updated > 0 then
         dbms_output.put_line('Usuario Actualizado.');
     else
         dbms_output.put_line('Error al actualizar usuario.');

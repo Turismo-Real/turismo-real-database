@@ -12,7 +12,7 @@ drop procedure sp_agregar_usuario;
 drop procedure sp_editar_usuario;
 drop procedure sp_eliminar_usuario;
 drop procedure sp_obten_usuarios;
-drop procedure sp_usuario_por_rut;
+drop procedure sp_usuario_por_id;
 drop procedure sp_obten_comuna_por_region;
 drop procedure sp_obten_regiones;
 drop procedure sp_login;
@@ -132,6 +132,7 @@ end;
 
 -- SP AGREGAR USUARIO
 create or replace procedure sp_agregar_usuario(
+    pasaporte_u in varchar,
     rut_u in varchar,
     dv_u in varchar,
     pnombre_u in varchar,
@@ -150,34 +151,42 @@ create or replace procedure sp_agregar_usuario(
     calle_u in varchar,
     numero_u in varchar,
     depto_u in varchar,
-    casa_u in varchar
+    casa_u in varchar,
+    ok out number -- retorna id de usuario
 ) is 
     genero_id number;
     pais_id number;
     tipo_id number;
     comuna_id number;
     fecha_nac date;
+    usuario_id number;
 begin
     genero_id := fn_obten_id_genero(genero_u);
     pais_id := fn_obten_id_pais(pais_u);
     tipo_id := fn_obten_id_tipo_usuario(tipo_u);
     comuna_id := fn_obten_id_comuna(comuna_u);
     fecha_nac := to_date(fecnac_u, 'dd/mm/yyyy');
+    usuario_id := seq_usuario.nextval;
 
--- todo: insert exceptions
+    insert into usuario(id_usuario,pasaporte,numrut,dvrut,pnombre,snombre,apepat,apemat,fec_nac,correo,telefono_movil,telefono_fijo,password,id_genero,id_pais,id_tipo)
+    values(usuario_id,pasaporte_u,rut_u,dv_u,pnombre_u,snombre_u,apepat_u,apemat_u,fecha_nac,email_u,telmovil_u,telfijo_u,pass_u,genero_id,pais_id,tipo_id);
 
-    insert into usuario(numrut,dvrut,pnombre,snombre,apepat,apemat,fec_nac,correo,telefono_movil,telefono_fijo,password,id_genero,id_pais,id_tipo)
-    values(rut_u,dv_u,pnombre_u,snombre_u,apepat_u,apemat_u,fecha_nac,email_u,telmovil_u,telfijo_u,pass_u,genero_id,pais_id,tipo_id);
-
-    insert into direccion(id_direccion,id_departamento,numrut,id_comuna,calle,numero,depto,casa)
-    values(seq_direccion.nextval,null,rut_u,comuna_id,calle_u,numero_u,depto_u,casa_u);
+    insert into direccion(id_direccion,id_departamento,id_usuario,id_comuna,calle,numero,depto,casa)
+    values(seq_direccion.nextval,null,usuario_id,comuna_id,calle_u,numero_u,depto_u,casa_u);
     commit;
+    ok := usuario_id;
+exception
+    when others then
+    rollback;
+    ok := 0;
 end;
 
 /
 
 -- SP EDITAR USUARIO
 create or replace procedure sp_editar_usuario(
+    usuario_id in number,
+    pasaporte_u in varchar,
     rut_u in varchar,
     dv_u in varchar,
     pnombre_u in varchar,
@@ -197,7 +206,7 @@ create or replace procedure sp_editar_usuario(
     numero_u in varchar,
     depto_u in varchar,
     casa_u in varchar,
-    updated out number
+    updated out number -- retorna el id del usuario
 ) is
     genero_id number;
     pais_id number;
@@ -210,7 +219,11 @@ begin
     comuna_id := fn_obten_id_comuna(comuna_u);
 
     update usuario
-    	set pnombre = pnombre_u,
+    	set 
+            pasaporte = pasaporte_u,
+            numrut = rut_u,
+            dvrut = dv_u,
+            pnombre = pnombre_u,
         	snombre = snombre_u,
         	apepat = apepat_u,
         	apemat = apemat_u,
@@ -222,7 +235,7 @@ begin
         	id_genero = genero_id,
         	id_pais = pais_id,
         	id_tipo = tipo_id
-        where numrut = rut_u;
+        where id_usuario = usuario_id;
 
     update direccion
         set id_comuna = comuna_id,
@@ -230,9 +243,9 @@ begin
             numero = numero_u,
             depto = depto_u,
             casa = casa_u
-        where numrut = rut_u;
+        where id_usuario = usuario_id;
 
-    updated := 1;
+    updated := usuario_id;
 exception
     when others then
         updated := 0;
@@ -241,24 +254,19 @@ end;
 /
 
 -- SP ELIMINAR USUARIO
-create or replace procedure sp_eliminar_usuario(rut_u in varchar, removed out number)
-is 
-    user_c number;
-begin
-    select count(*) into user_c
-    from usuario
-    where numrut = rut_u;
+create or replace procedure sp_eliminar_usuario(usuario_id in number, removed out number)
+is begin
+    delete from usuario
+    where id_usuario = usuario_id;
 
-    if user_c = 0 then
-        removed := 0;
-    else
-        delete from usuario
-        where numrut = rut_u;
-        removed := 1;
-        commit;
-    end if;
+    commit;
+    removed := 1;
 exception
+    when no_data_found then
+        rollback;
+        removed := 0;
     when others then
+        rollback;
         removed := 0;
 end;
 
@@ -268,7 +276,7 @@ end;
 create or replace procedure sp_obten_usuarios(usuarios out sys_refcursor)
 is begin
     open usuarios for
-        select numrut, dvrut,
+        select id_usuario, pasaporte, numrut, dvrut,
             pnombre, snombre, apepat, apemat,
             fec_nac, correo,
             telefono_movil, telefono_fijo,
@@ -277,30 +285,32 @@ is begin
         from usuario join genero using(id_genero)
         join pais using(id_pais)
         join tipo_usuario using(id_tipo)
-        join direccion using(numrut)
+        join direccion using(id_usuario)
         join comuna using(id_comuna)
-        join region using(id_region);
+        join region using(id_region)
+        order by id_usuario;
 end;
 
 /
 
--- SP BUSCAR USUARIO POR RUT
--- retorna datos del usuario si es que encuentra uno
-create or replace procedure sp_usuario_por_rut(rut in varchar, cur_user out sys_refcursor)
+-- SP BUSCAR USUARIO POR ID
+create or replace procedure sp_usuario_por_id(usuario_id in number, cur_user out sys_refcursor)
 is begin
-    open cur_user for select numrut, dvrut,
-        pnombre, snombre, apepat, apemat,
-        fec_nac, correo,
-        telefono_movil, telefono_fijo,
-        genero, pais, tipo, region, comuna,
-        calle, numero, depto, casa
-    from usuario join genero using(id_genero)
-    join pais using(id_pais)
-    join tipo_usuario using(id_tipo)
-    join direccion using(numrut)
-    join comuna using(id_comuna)
-    join region using(id_region)
-    where numrut = rut;
+    open cur_user for 
+        select
+            id_usuario, pasaporte, numrut, dvrut,
+            pnombre, snombre, apepat, apemat,
+            fec_nac, correo,
+            telefono_movil, telefono_fijo,
+            genero, pais, tipo, region, comuna,
+            calle, numero, depto, casa
+        from usuario join genero using(id_genero)
+        join pais using(id_pais)
+        join tipo_usuario using(id_tipo)
+        join direccion using(id_usuario)
+        join comuna using(id_comuna)
+        join region using(id_region)
+        where id_usuario = usuario_id;
 end;
 
 /

@@ -19,6 +19,9 @@ drop procedure sp_obten_comuna_por_region;
 drop procedure sp_obten_regiones;
 drop procedure sp_login;
 drop procedure sp_agregar_depto;
+drop procedure sp_obten_deptos;
+drop procedure sp_obten_depto_por_id;
+drop procedure sp_eliminar_depto;
 drop procedure sp_agregar_instalaciones;
 drop procedure sp_obten_instalaciones;
 
@@ -444,6 +447,30 @@ is begin
         join tipo_departamento using(id_tipo)
         join estado_depto using(id_estado)
         where id_departamento = depto_id;
+end;
+
+/
+
+-- SP ELIMINAR DEPARTAMENTO
+create or replace procedure sp_eliminar_depto(depto_id in number, removed out number)
+is 
+    id_d number;
+begin
+    -- comprobar existencia de depto
+    select id_departamento into id_d
+    from departamento
+    where id_departamento = depto_id;
+
+    delete from departamento
+    where id_departamento = depto_id;
+    
+    commit;
+    removed := 1; -- depto eliminado
+exception
+    when no_data_found then
+        removed := -1; -- no existe depto
+    when others then
+        removed := 0; -- error al eliminar
 end;
 
 /

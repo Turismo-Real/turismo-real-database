@@ -25,6 +25,7 @@ drop procedure sp_editar_depto;
 drop procedure sp_eliminar_depto;
 drop procedure sp_agregar_instalaciones;
 drop procedure sp_obten_instalaciones;
+drop procedure sp_eliminar_instalaciones;
 
 /
 
@@ -622,6 +623,15 @@ exception
         success_sp := -1; -- no existe depto
     when others then
         success_sp := 0; -- error al agregar
+end;
+
+/
+
+-- SP ELIMINAR INSTALACIONES
+create or replace procedure sp_eliminar_instalaciones(depto_id in number)
+is begin
+    delete from instalacion_departamento
+    where id_departamento = depto_id;
 end;
 
 /

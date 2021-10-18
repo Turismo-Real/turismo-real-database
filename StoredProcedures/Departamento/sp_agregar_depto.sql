@@ -30,8 +30,8 @@ begin
         values(depto_id,rol_d,dormitorios_d,banios_d,descripcion_d,superficie_d,valor_diario_d,tipo_id,estado_id);    
     
     -- INGRESAR DIRECCION
-    insert into direccion(id_direccion,id_departamento,numrut,id_comuna,calle,numero,depto)
-        values(seq_direccion.nextval,depto_id,null,comuna_id,calle_d,numero_d,depto_d);
+    insert into direccion(id_direccion,id_departamento,id_comuna,calle,numero,depto)
+        values(seq_direccion.nextval,depto_id,comuna_id,calle_d,numero_d,depto_d);
 
     -- RETORNA EL ID DEL DEPARTAMENTO
     saved := depto_id;

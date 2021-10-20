@@ -9,6 +9,7 @@ drop function fn_obten_id_tipo_depto;
 drop function fn_obten_id_tipo_usuario;
 drop function fn_obten_id_instalacion;
 drop function fn_agregar_instalacion;
+drop function fn_obten_id_tipo_servicio;
 
 drop procedure sp_agregar_usuario;
 drop procedure sp_editar_usuario;
@@ -26,6 +27,11 @@ drop procedure sp_eliminar_depto;
 drop procedure sp_agregar_instalaciones;
 drop procedure sp_obten_instalaciones;
 drop procedure sp_eliminar_instalaciones;
+drop procedure sp_agregar_servicio;
+drop procedure sp_editar_servicio;
+drop procedure sp_eliminar_servicio;
+drop procedure sp_obten_servicio_id;
+drop procedure sp_obten_servicios;
 
 /
 
@@ -165,6 +171,27 @@ begin
 exception
     when others then
         instalacion_id := 0;
+end;
+
+/
+
+-- FN OBTEN ID TIPO SERVICIO
+create or replace function fn_obten_id_tipo_servicio(tipo in varchar)
+return number
+is
+    servicio_id turismo_real.tipo_servicio.id_tipo_servicio%type;
+begin
+    select id_tipo_servicio into servicio_id
+    from tipo_servicio
+    where upper(tipo_servicio) = upper(tipo);
+    return servicio_id;
+exception
+    when no_data_found then
+        servicio_id := 0;
+        return servicio_id;
+    when others then
+        servicio_id := 0;
+        return servicio_id;
 end;
 
 /
@@ -645,6 +672,121 @@ is begin
         join instalacion using(id_instalacion)
         where id_departamento = depto_id
         order by instalacion;
+end;
+
+/
+
+-- SP AGREGAR SERVICIO
+create or replace procedure sp_agregar_servicio(
+    nombre_s in varchar,
+    descripcion_s in varchar,
+    valor_s in number,
+    tipo_s in varchar,
+    saved out number
+) is
+    id_s turismo_real.servicio.id_servicio%type;
+    tipo_id turismo_real.tipo_servicio.id_tipo_servicio%type;
+begin
+    tipo_id := fn_obten_id_tipo_servicio(tipo_s);
+    id_s := seq_tipo_servicio.nextval;
+    
+    if tipo_id > 0 then
+        insert into servicio(id_servicio,nombre_servicio,descripcion,valor,id_tipo_servicio)
+            values(id_s,nombre_s,descripcion_s,valor_s,tipo_id);
+        commit;
+        saved := id_s; -- servicio agregado
+    else
+        saved := -1; -- no existe tipo servicio
+    end if;
+exception
+    when others then
+        saved := 0; -- error al agregar
+end;
+
+/
+
+-- SP EDITAR SERVICIO
+create or replace procedure sp_editar_servicio(
+    servicio_id in number,
+    nombre_s in varchar,
+    descripcion_s in varchar,
+    valor_s in number,
+    tipo_s in varchar,
+    updated out number
+) is
+    id_s turismo_real.servicio.id_servicio%type;
+    tipo_id turismo_real.tipo_servicio.id_tipo_servicio%type;
+begin
+    -- comprobar existencia de servicio
+    select id_servicio into id_s
+    from servicio
+    where id_servicio = servicio_id;
+
+    -- obtener id tipo servicio
+    tipo_id := fn_obten_id_tipo_servicio(tipo_s);
+    
+    if tipo_id > 0 then -- tipo existe
+        update servicio
+            set nombre_servicio = nombre_s,
+                descripcion = descripcion_s,
+                valor = valor_s,
+                id_tipo_servicio = tipo_id
+            where id_servicio = servicio_id;
+        commit;
+        updated := 1;
+    else
+        updated := -2; -- no existe tipo servicio
+    end if;
+exception
+    when no_data_found then
+        updated := -1; -- no existe id servicio
+    when others then
+        updated := 0; -- error al editar
+end;
+
+/
+
+-- SP ELIMINAR SERVICIO
+create or replace procedure sp_eliminar_servicio(servicio_id in number, removed out number)
+is
+    id_s turismo_real.servicio.id_servicio%type;
+begin
+    -- comprobar existencia de servicio
+    select id_servicio into id_s
+    from servicio
+    where id_servicio = servicio_id;
+    -- eliminar
+    delete from servicio
+    where id_servicio = servicio_id;
+    commit;
+    removed := 1; -- servicio eliminado
+exception
+    when no_data_found then
+        removed := -1; -- no existe id servicio
+    when others then
+        removed := 0; -- error al eliminar
+end;
+
+/
+
+-- OBTEN SERVICIO POR ID
+create or replace procedure sp_obten_servicio_id(servicio_id in number, servicio out sys_refcursor)
+is begin
+    open servicio for
+        select id_servicio, nombre_servicio, descripcion, valor, tipo_servicio
+        from servicio join tipo_servicio using(id_tipo_servicio)
+        where id_servicio = servicio_id;
+end;
+
+/
+
+-- SP OBTEN SERVICIOS
+create or replace procedure sp_obten_servicios(servicios out sys_refcursor)
+is begin
+    open servicios for
+        select
+            id_servicio, nombre_servicio, descripcion, valor, tipo_servicio
+        from servicio join tipo_servicio using(id_tipo_servicio);
 end;
 
 /

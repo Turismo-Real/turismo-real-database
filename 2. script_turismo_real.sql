@@ -944,9 +944,9 @@ INSERT INTO ESTADO_RESERVA VALUES(SEQ_ESTADO_RESERVA.NEXTVAL, 'Cancelada');
 
 -- ASISTENTE
 INSERT INTO ASISTENTE VALUES(SEQ_ASISTENTE.NEXTVAL,'','16526553', 'K', 'Andrea', 'Florencia', 'Segura', 'Montaño', 'af.segura@gmail.com');
-INSERT INTO ASISTENTE VALUES(SEQ_ASISTENTE.NEXTVAL,'111222333',null, '6', 'Filomena', 'Adelina ', 'Hervas', 'Fonseca', 'fhervas@gmail.com');
+INSERT INTO ASISTENTE VALUES(SEQ_ASISTENTE.NEXTVAL,'111222333',null, null, 'Filomena', 'Adelina ', 'Hervas', 'Fonseca', 'fhervas@gmail.com');
 INSERT INTO ASISTENTE VALUES(SEQ_ASISTENTE.NEXTVAL,'','12658987', '5', 'Juan', 'Antonio', 'Mariño', 'Pellicer', 'juan.marino.p@gmail.com');
-INSERT INTO ASISTENTE VALUES(SEQ_ASISTENTE.NEXTVAL,'444555666',null, '7', 'Jose', 'Javier', 'Vivas', 'Lillo', 'j.vivas@gmail.com');
+INSERT INTO ASISTENTE VALUES(SEQ_ASISTENTE.NEXTVAL,'444555666',null, null, 'Jose', 'Javier', 'Vivas', 'Lillo', 'j.vivas@gmail.com');
 INSERT INTO ASISTENTE VALUES(SEQ_ASISTENTE.NEXTVAL,'','16445271', '9', 'Axel', 'Guerra', 'Ayala', 'Espino', 'aayala@gmail.com');
 
 -- RESERVA

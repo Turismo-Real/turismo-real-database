@@ -32,6 +32,7 @@ drop procedure sp_editar_servicio;
 drop procedure sp_eliminar_servicio;
 drop procedure sp_obten_servicio_id;
 drop procedure sp_obten_servicios;
+drop procedure sp_obten_paises;
 
 /
 

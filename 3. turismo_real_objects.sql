@@ -34,6 +34,7 @@ drop procedure sp_obten_servicio_id;
 drop procedure sp_obten_servicios;
 drop procedure sp_obten_paises;
 drop procedure sp_obten_reservas;
+drop procedure sp_obten_reserva_id;
 
 /
 
@@ -806,4 +807,18 @@ end;
 
 /
 
+-- SP OBTEN RESERVA POR ID
+create or replace procedure sp_obten_reserva_id(reserva_id in number, reserva out sys_refcursor)
+is begin
+    open reserva for
+        select
+            id_reserva,fechora_reserva,
+            to_char(fec_desde,'dd/mm/yyyy') as fec_desde,to_char(fec_hasta,'dd/mm/yyyy') as fec_hasta,
+            valor_arriendo,fechora_checkin,fechora_checkout,checkin_conforme,checkout_conforme,
+            estado_checkin,estado_checkout,estado,id_usuario,id_departamento
+        from reserva join estado_reserva using(id_estado)
+        where id_reserva = reserva_id;
+end;
+
+/
 commit;

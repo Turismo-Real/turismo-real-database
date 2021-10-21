@@ -401,6 +401,11 @@ BEGIN
 END;
 /
 
+-- CAMBIO FORMATO FECHA POR DEFECTO
+alter session set nls_date_format = 'dd-mm-yyyy hh24:mi:ss';
+
+/
+
 -- * POBLADO *
 
 -- TIPO MANTENCION
@@ -951,11 +956,11 @@ INSERT INTO ASISTENTE VALUES(SEQ_ASISTENTE.NEXTVAL,'444555666',null, null, 'Jose
 INSERT INTO ASISTENTE VALUES(SEQ_ASISTENTE.NEXTVAL,'','16445271', '9', 'Axel', 'Guerra', 'Ayala', 'Espino', 'aayala@gmail.com');
 
 -- RESERVA
-INSERT INTO RESERVA VALUES(SEQ_RESERVA.NEXTVAL, '01/10/21', '10/10/21', 125000 , null, null, null, null, null, null, 1, 1, 3);
-INSERT INTO RESERVA VALUES(SEQ_RESERVA.NEXTVAL, '27/09/21', '05/10/21', 230000, null, null, null, null, null, null, 1, 3, 4);
-INSERT INTO RESERVA VALUES(SEQ_RESERVA.NEXTVAL, '20/09/21', '30/09/21', 250000, '20/09/21 10:00:00', null, 'S', null, 'Check in en buenas condiciones', null, 2, 5, 5);
-INSERT INTO RESERVA VALUES(SEQ_RESERVA.NEXTVAL, '01/09/21', '10/09/21', 122000, '01/09/21 10:33:00', '10/09/21 13:20:00', 'S', 'S', 'Check in en buen estado', 'Devuelto en perfectas condiciones', 4, 4, 6);
-INSERT INTO RESERVA VALUES(SEQ_RESERVA.NEXTVAL, '20/08/21', '05/09/21', 220000, '20/08/21 12:16:15', '05/09/21 12:54:32', 'S', 'S', 'Todo bien', 'Todo correcto', 4, 5, 3);
+INSERT INTO RESERVA VALUES(SEQ_RESERVA.NEXTVAL, sysdate-3, trunc(sysdate+2), trunc(sysdate+6), 125000 , null, null, null, null, null, null, 1, 1, 3);
+INSERT INTO RESERVA VALUES(SEQ_RESERVA.NEXTVAL, sysdate-2, trunc(sysdate+3), trunc(sysdate+5), 230000, null, null, null, null, null, null, 1, 3, 4);
+INSERT INTO RESERVA VALUES(SEQ_RESERVA.NEXTVAL, sysdate-5, trunc(sysdate+4), trunc(sysdate+8), 250000, sysdate+4, null, 'S', null, 'Check in en buenas condiciones', null, 2, 5, 5);
+INSERT INTO RESERVA VALUES(SEQ_RESERVA.NEXTVAL, sysdate-3, trunc(sysdate+1), trunc(sysdate+10), 122000, sysdate+1, sysdate+10, 'S', 'S', 'Check in en buen estado', 'Devuelto en perfectas condiciones', 4, 4, 6);
+INSERT INTO RESERVA VALUES(SEQ_RESERVA.NEXTVAL, sysdate-6, trunc(sysdate+6), trunc(sysdate+11), 220000, sysdate+6, sysdate+11, 'S', 'S', 'Todo bien', 'Todo correcto', 4, 5, 3);
 
 -- ASISTENTE RESERVA
 INSERT INTO ASISTENTE_RESERVA VALUES(SEQ_ASISTENTE_RESERVA.NEXTVAL, 1, 1);

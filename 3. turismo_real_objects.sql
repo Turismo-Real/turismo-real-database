@@ -33,6 +33,7 @@ drop procedure sp_eliminar_servicio;
 drop procedure sp_obten_servicio_id;
 drop procedure sp_obten_servicios;
 drop procedure sp_obten_paises;
+drop procedure sp_obten_reservas;
 
 /
 
@@ -788,6 +789,19 @@ is begin
         select
             id_servicio, nombre_servicio, descripcion, valor, tipo_servicio
         from servicio join tipo_servicio using(id_tipo_servicio);
+end;
+
+/
+-- SP OBTEN RESERVAS
+create or replace procedure sp_obten_reservas(reservas out sys_refcursor)
+is begin
+    open reservas for
+        select
+            id_reserva,fechora_reserva,
+            to_char(fec_desde,'dd/mm/yyyy') as fec_desde,to_char(fec_hasta,'dd/mm/yyyy') as fec_hasta,
+            valor_arriendo,fechora_checkin,fechora_checkout,checkin_conforme,checkout_conforme,
+            estado_checkin,estado_checkout,estado,id_usuario,id_departamento
+        from reserva join estado_reserva using(id_estado);
 end;
 
 /

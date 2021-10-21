@@ -402,7 +402,7 @@ END;
 /
 
 -- CAMBIO FORMATO FECHA POR DEFECTO
-alter session set nls_date_format = 'dd-mm-yyyy hh24:mi:ss';
+alter session set nls_date_format = 'dd/mm/yyyy hh24:mi:ss';
 
 /
 

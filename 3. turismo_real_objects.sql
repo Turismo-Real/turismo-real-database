@@ -35,6 +35,7 @@ drop procedure sp_obten_servicios;
 drop procedure sp_obten_paises;
 drop procedure sp_obten_reservas;
 drop procedure sp_obten_reserva_id;
+drop procedure sp_eliminar_reserva;
 
 /
 
@@ -818,6 +819,29 @@ is begin
             estado_checkin,estado_checkout,estado,id_usuario,id_departamento
         from reserva join estado_reserva using(id_estado)
         where id_reserva = reserva_id;
+end;
+
+/
+
+-- -- SP ELIMINAR RESERVA
+create or replace procedure sp_eliminar_reserva(reserva_id in number, removed out number)
+is
+    id_r turismo_real.reserva.id_reserva%type;
+begin
+    -- comprobar existencia de reserva
+    select id_reserva into id_r
+    from reserva
+    where id_reserva = reserva_id;
+    
+    delete from reserva
+    where id_reserva = reserva_id;
+    commit;
+    removed := 1; -- reserva eliminada
+exception
+    when no_data_found then
+        removed := -1; -- no existe reserva
+    when others then
+        removed := 0; -- error al eliminar
 end;
 
 /

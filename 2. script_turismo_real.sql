@@ -981,6 +981,7 @@ INSERT INTO RESERVA VALUES(SEQ_RESERVA.NEXTVAL, '15/07/2021 16:08:11', '16/07/20
 INSERT INTO RESERVA VALUES(SEQ_RESERVA.NEXTVAL, '21/10/2021 16:48:21', '01/11/2021', '06/11/2021', 125000, null, null, null, null, null, null, 1, 2, 8); -- cargada
 INSERT INTO RESERVA VALUES(SEQ_RESERVA.NEXTVAL, '20/10/2021 12:32:23', '10/11/2021', '13/11/2021', 125000, null, null, null, null, null, null, 1, 2, 7); -- cargada
 INSERT INTO RESERVA VALUES(SEQ_RESERVA.NEXTVAL, '15/10/2021 12:32:23', '21/10/2021', '25/10/2021', 150000, '21/10/2021 11:22:48', null, 1, null, 'Departamento en buenas condiciones', null, 2, 2, 7); -- check in
+INSERT INTO RESERVA VALUES(SEQ_RESERVA.NEXTVAL, '15/10/2021 12:32:23', '21/10/2021', '25/10/2021', 150000, null, null, 1, null, null, null, 5, 2, 7); -- cancelada
 -- departamento 3 : usuario [10 11 12]
 INSERT INTO RESERVA VALUES(SEQ_RESERVA.NEXTVAL, '05/04/2021 12:32:23', '10/04/2021', '20/04/2021', 125000, '10/04/2021 11:22:48', '20/04/2021 18:22:18', 1, 1, 'Departamento en buenas condiciones', 'Entregado en buenas condiciones', 4, 3, 10); -- cerrada
 INSERT INTO RESERVA VALUES(SEQ_RESERVA.NEXTVAL, '06/04/2021 10:42:11', '21/04/2021', '23/04/2021', 125000, '21/04/2021 13:25:38', '23/04/2021 17:35:36', 1, 1, 'Departamento en buenas condiciones', 'Entregado perfectamente', 4, 3, 11); -- cerrada

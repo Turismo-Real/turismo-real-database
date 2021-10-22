@@ -10,6 +10,8 @@ drop function fn_obten_id_tipo_usuario;
 drop function fn_obten_id_instalacion;
 drop function fn_agregar_instalacion;
 drop function fn_obten_id_tipo_servicio;
+drop function fn_obten_tope_reserva;
+drop function fn_calcular_dias_arriendo;
 
 drop procedure sp_agregar_usuario;
 drop procedure sp_editar_usuario;
@@ -161,6 +163,7 @@ end;
 
 /
 
+-- FN AGREGAR INSTALACION
 create or replace function fn_agregar_instalacion(instalacion in varchar)
 return number
 is
@@ -196,6 +199,41 @@ exception
     when others then
         servicio_id := 0;
         return servicio_id;
+end;
+
+/
+
+-- FN OBTEN TOPE RESERVA
+create or replace function fn_obten_tope_reserva(
+    depto_id in number,
+    fec_desde_in in date,
+    fec_hasta_in in date
+)return number is
+    tope_reserva number;
+begin
+    -- comprobar que fechas no topen con otra reserva  
+    select
+        count(*) into tope_reserva
+    from reserva join estado_reserva using(id_estado)
+    where id_departamento = depto_id
+    and upper(estado) != 'CANCELADA'
+    and ((fec_desde_in between fec_desde and fec_hasta)
+    or (fec_hasta_in between fec_desde and fec_hasta));
+    
+    return tope_reserva;
+end;
+
+/
+
+-- FN CALCULAR DIAS ARRIENDO
+create or replace function fn_calcular_dias_arriendo(fec_desde in date, fec_hasta in date)
+return number is
+    dias_arriendo number;
+begin
+    select
+        to_date(fec_hasta) - to_date(fec_desde) into dias_arriendo
+    from dual;
+    return dias_arriendo;
 end;
 
 /

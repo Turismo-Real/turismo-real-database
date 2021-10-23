@@ -10,7 +10,7 @@ create or replace procedure sp_agregar_reserva(
     reserva_id turismo_real.reserva.id_reserva%type;
     fec_desde_in turismo_real.reserva.fec_desde%type;
     fec_hasta_in turismo_real.reserva.fec_hasta%type;
-    estado_id turismo_real.estado_departamento.estado%type;
+    estado_id turismo_real.estado_depto.estado%type;
     tope_reservas number;
     dias_arriendo number;
     valor_total_arriendo number;
@@ -30,7 +30,7 @@ begin
         -- obtener topes de fecha con otras reservas
         tope_reserva := fn_obten_tope_reserva(depto_id, fec_desde_in, fec_hasta_in);
         -- obtener dias de arriendo
-        dias_arriendo := fn_calcular_dias_arriendo(fec_desde, fec_hasta);
+        dias_arriendo := fn_calcular_dias_arriendo(fec_desde_in, fec_hasta_in);
         
         if tope_reserva = 0 and dias_arriendo <= 30 then
             -- obtener valor arriendo

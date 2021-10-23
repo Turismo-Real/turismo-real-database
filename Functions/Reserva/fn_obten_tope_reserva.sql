@@ -12,8 +12,8 @@ begin
     from reserva join estado_reserva using(id_estado)
     where id_departamento = depto_id
     and upper(estado) != 'CANCELADA'
-    and ((fec_desde_in between fec_desde and fec_hasta)
-    or (fec_hasta_in between fec_desde and fec_hasta));
+    and ((fec_desde between fec_desde_in and fec_hasta_in)
+    or (fec_hasta between fec_desde_in and fec_hasta_in));
     
     return tope_reserva;
 end;

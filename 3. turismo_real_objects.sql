@@ -13,6 +13,7 @@ drop function fn_obten_id_tipo_servicio;
 drop function fn_obten_tope_reserva;
 drop function fn_calcular_dias_arriendo;
 drop function fn_caclular_total_arriendo;
+drop function fn_obten_depto;
 
 drop procedure sp_agregar_usuario;
 drop procedure sp_editar_usuario;
@@ -272,6 +273,23 @@ exception
         return 0;
     when others then
         return 0;
+end;
+
+/
+
+-- FN OBTEN DEPTO
+create or replace function fn_obten_depto(depto_id in number)
+return number is
+    id_d turismo_real.departamento.id_departamento%type;
+begin
+    select id_departamento into id_d
+    from departamento
+    where id_departamento = depto_id;
+    
+    return id_d;
+exception
+    when no_data_found then return 0;
+    when others then return 0;
 end;
 
 /

@@ -972,9 +972,9 @@ create or replace procedure sp_agregar_reserva(
     fec_desde_in turismo_real.reserva.fec_desde%type;
     fec_hasta_in turismo_real.reserva.fec_hasta%type;
     estado_id turismo_real.estado_depto.estado%type;
+    valor_arriendo turismo_real.reserva.valor_arriendo%type;
     tope_reservas number;
     dias_arriendo number;
-    valor_total_arriendo number;
     cliente_id number;
     depto_id number;
     tope_reserva number;
@@ -994,8 +994,8 @@ begin
         dias_arriendo := fn_calcular_dias_arriendo(fec_desde_in, fec_hasta_in);
         
         if tope_reserva = 0 and dias_arriendo <= 30 then
-            -- obtener valor arriendo
-            valor_total_arriendo := fn_caclular_total_arriendo(depto_id, dias_arriendo);
+            -- obtener valor arriendo depto
+            valor_arriendo := fn_obten_valor_arriendo(depto_id);
             -- obtener id estado reserva (default CARGADA)
             estado_id := fn_obten_id_estado_reserva('CARGADA');
             -- generar id reserva
@@ -1003,7 +1003,7 @@ begin
             
             -- crear nueva reserva
             insert into reserva(id_reserva,fechora_reserva,fec_desde,fec_hasta,valor_arriendo,id_estado,id_departamento,id_usuario)
-                values(reserva_id,sysdate,fec_desde_in,fec_hasta_in,valor_total_arriendo,estado_id,depto_id,cliente_id);
+                values(reserva_id,sysdate,fec_desde_in,fec_hasta_in,valor_arriendo,estado_id,depto_id,cliente_id);
 
             commit;            
             saved := reserva_id; -- OK: RETORNA ID RESERVA

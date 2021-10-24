@@ -14,6 +14,7 @@ drop function fn_obten_tope_reserva;
 drop function fn_calcular_dias_arriendo;
 drop function fn_caclular_total_arriendo;
 drop function fn_obten_depto;
+drop function fn_obten_valor_arriendo;
 
 drop procedure sp_agregar_usuario;
 drop procedure sp_editar_usuario;
@@ -275,6 +276,23 @@ exception
         return 0;
     when others then
         return 0;
+end;
+
+/
+
+-- FN OBTEN VALOR ARRIENDO
+create or replace function fn_obten_valor_arriendo(depto_id in number)
+return number is
+    valor turismo_real.departamento.valor_diario%type;
+begin
+    select valor_diario into valor
+    from departamento
+    where id_departamento = depto_id;
+
+    return valor;
+exception
+    when no_data_found then return 0;
+    when others then return 0;
 end;
 
 /

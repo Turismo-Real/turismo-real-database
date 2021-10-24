@@ -2,7 +2,6 @@
 create or replace procedure sp_agregar_reserva(
     fec_desde_r in varchar,
     fec_hasta_r in varchar,
-    valor_arriendo_r in number,
     id_usuario_r in number,
     id_departamento_r in number,
     saved out number
@@ -64,4 +63,29 @@ begin
 exception
     when others then
         saved := 0; -- ERROR AL AGREGAR RESERVA
+end;
+
+-- PRUEBA SP
+declare
+    desde turismo_real.reserva.fec_desde%type := to_date('20/11/2021');
+    hasta turismo_real.reserva.fec_hasta%type := to_date('23/11/2021');
+    usuario turismo_real.usuario.id_usuario%type := 5;
+    depto turismo_real.departamento.id_departamento%type := 3;
+    saved number;
+begin
+    sp_agregar_reserva(desde,hasta,usuario,depto,saved);
+    
+    if saved > 0 then
+        dbms_output.put_line('Reserva agregada.');
+    elsif saved = -1 then
+        dbms_output.put_line('Cliente no existe.');
+    elsif saved = -2 then
+        dbms_output.put_line('Departamento no existe.');
+    elsif saved = -3 then
+        dbms_output.put_line('Ya existe una reserva en las fechas ingresadas.');
+    elsif saved = -4 then
+        dbms_output.put_line('La reserva no debe superar los 30 días.');
+    else
+        dbms_output.put_line('Error al agregar reserva.');
+    end if;
 end;

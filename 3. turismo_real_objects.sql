@@ -741,19 +741,24 @@ end;
 create or replace procedure sp_login(
     email_u in varchar2, 
     pass_u in varchar2, 
-    tipo_u out varchar2
+    tipo_u out varchar2,
+    usuario_id out number
 ) is 
     tipo_usuario varchar2(50) := 'ERROR';
 begin
+    usuario_id := 0;
+
     select 
-        tipo into tipo_usuario
+        id_usuario, tipo into usuario_id, tipo_usuario
     from usuario join tipo_usuario using(id_tipo)
     where upper(correo) = upper(email_u) and upper(password) = upper(pass_u);
     
     tipo_u := tipo_usuario;
 exception
-    when no_data_found then tipo_u := tipo_usuario;
-    when others then tipo_u := tipo_usuario;
+    when no_data_found then 
+        tipo_u := tipo_usuario;
+    when others then
+        tipo_u := tipo_usuario;
 end;
 
 /

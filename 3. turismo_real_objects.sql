@@ -15,6 +15,7 @@ drop function fn_calcular_dias_arriendo;
 drop function fn_caclular_total_arriendo;
 drop function fn_obten_depto;
 drop function fn_obten_valor_arriendo;
+drop function fn_obten_cliente;
 
 drop procedure sp_agregar_usuario;
 drop procedure sp_editar_usuario;
@@ -310,6 +311,27 @@ begin
 exception
     when no_data_found then return 0;
     when others then return 0;
+end;
+
+/
+
+-- FN OBTEN CLIENTE
+create or replace function fn_obten_cliente(cliente_id in number)
+return number
+is
+    id_c turismo_real.usuario.id_usuario%type;
+begin
+    select id_usuario into id_c
+    from usuario join tipo_usuario using(id_tipo)
+    where upper(tipo) = 'CLIENTE'
+    and id_usuario = cliente_id;
+    
+    return id_c; -- RETORNA ID CLIENTE
+exception
+    when no_data_found then
+        return 0; -- NO EXISTE ID CLIENTE
+    when others then
+        return 0; -- ERROR
 end;
 
 /

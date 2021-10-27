@@ -14,7 +14,7 @@ begin
     from reserva
     where id_reserva = reserva_id;
 
-    -- id de estado (check in)
+    -- id de estado (check out)
     estado_id := fn_obten_id_estado_reserva('CHECK OUT');
 
     -- ingresar check out

@@ -45,6 +45,7 @@ drop procedure sp_eliminar_reserva;
 drop procedure sp_agregar_reserva;
 drop procedure sp_obten_fechas_reservadas;
 drop procedure sp_obten_lista_instalaciones;
+drop procedure sp_obten_tipo_servicios;
 
 /
 
@@ -1127,7 +1128,7 @@ begin
     from reserva
     where id_reserva = reserva_id;
 
-    -- id de estado (check in)
+    -- id de estado (check out)
     estado_id := fn_obten_id_estado_reserva('CHECK OUT');
 
     -- ingresar check out
@@ -1154,6 +1155,16 @@ is begin
     open instalaciones for
         select instalacion
         from instalacion;
+end;
+
+/
+
+-- SP OBTEN TIPO SERVICIO
+create or replace procedure sp_obten_tipo_servicios(t_servicios out sys_refcursor)
+is begin
+    open t_servicios for
+        select tipo_servicio
+        from tipo_servicio;
 end;
 
 /

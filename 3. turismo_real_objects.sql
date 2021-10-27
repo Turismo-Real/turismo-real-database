@@ -44,6 +44,7 @@ drop procedure sp_obten_reserva_id;
 drop procedure sp_eliminar_reserva;
 drop procedure sp_agregar_reserva;
 drop procedure sp_obten_fechas_reservadas;
+drop procedure sp_obten_lista_instalaciones;
 
 /
 
@@ -1143,6 +1144,16 @@ exception
         check_out := -1; -- RESERVA NO EXISTE
     when others then
         check_out := 0; -- ERROR EN CHECK IN
+end;
+
+/
+
+-- SP OBTEN LISTA DE INSTALACIONES DISPONIBLES
+create or replace procedure sp_obten_lista_instalaciones(instalaciones out sys_refcursor)
+is begin
+    open instalaciones for
+        select instalacion
+        from instalacion;
 end;
 
 /

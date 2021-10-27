@@ -47,6 +47,7 @@ drop procedure sp_obten_fechas_reservadas;
 drop procedure sp_obten_lista_instalaciones;
 drop procedure sp_obten_tipo_servicios;
 drop procedure sp_obten_tipo_deptos;
+drop procedure sp_obten_estados_depto;
 
 /
 
@@ -1178,6 +1179,16 @@ is begin
         from tipo_departamento;
 end;
 
+
+/
+
+-- SP OBTEN ESTADOS DEPTO
+create or replace procedure sp_obten_estados_depto(estados out sys_refcursor)
+is begin
+    open estados for
+        select estado
+        from estado_depto;
+end;
 
 /
 

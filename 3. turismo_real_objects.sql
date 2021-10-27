@@ -49,6 +49,7 @@ drop procedure sp_obten_tipo_servicios;
 drop procedure sp_obten_tipo_deptos;
 drop procedure sp_obten_estados_depto;
 drop procedure sp_obten_estados_reserva;
+drop procedure sp_obten_tipo_mantencion;
 
 /
 
@@ -1199,6 +1200,16 @@ is begin
     open estados for
         select estado
         from estado_reserva;
+end;
+
+/
+
+-- SP OBTEN TIPO MANTENCION
+create or replace procedure sp_obten_tipo_mantencion(tipos out sys_refcursor)
+is begin
+    open tipos for
+        select tipo
+        from tipo_mantencion;
 end;
 
 /

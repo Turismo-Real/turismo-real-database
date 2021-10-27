@@ -46,6 +46,7 @@ drop procedure sp_agregar_reserva;
 drop procedure sp_obten_fechas_reservadas;
 drop procedure sp_obten_lista_instalaciones;
 drop procedure sp_obten_tipo_servicios;
+drop procedure sp_obten_tipo_deptos;
 
 /
 
@@ -1166,6 +1167,17 @@ is begin
         select tipo_servicio
         from tipo_servicio;
 end;
+
+/
+
+-- SP OBTEN TIPO DEPTOS
+create or replace procedure sp_obten_tipo_deptos(tipo_deptos out sys_refcursor)
+is begin
+    open tipo_deptos for    
+        select tipo_departamento
+        from tipo_departamento;
+end;
+
 
 /
 

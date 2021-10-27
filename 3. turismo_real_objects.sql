@@ -52,6 +52,7 @@ drop procedure sp_obten_estados_reserva;
 drop procedure sp_obten_tipo_mantencion;
 drop procedure sp_obten_estados_mantencion;
 drop procedure sp_obten_tipos_gasto;
+drop procedure sp_obten_tipos_pago;
 
 /
 
@@ -1232,6 +1233,16 @@ is begin
     open tipos for
         select tipo_gasto
         from tipo_gasto;
+end;
+
+/
+
+-- SP OBTEN TIPO PAGO
+create or replace procedure sp_obten_tipos_pago(tipos out sys_refcursor)
+is begin
+    open tipos for
+        select tipo_pago
+        from tipo_pago;
 end;
 
 /

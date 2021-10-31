@@ -1,7 +1,7 @@
 -- SP OBTEN PAISES
 create or replace procedure sp_obten_paises(paises out sys_refcursor)
 is begin
-    open paises for select pais from pais;
+    open paises for select pais from pais order by pais;
 end;
 
 -- PRUEBA SP

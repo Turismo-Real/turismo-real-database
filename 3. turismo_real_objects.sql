@@ -430,12 +430,18 @@ create or replace procedure sp_editar_usuario(
     casa_u in varchar,
     updated out number -- retorna el id del usuario
 ) is
+    id_u turismo_real.usuario.id_usuario%type;
     genero_id number;
     pais_id number;
     tipo_id number;
     comuna_id number;
     fecha_nac date;
 begin
+    -- comprobar existencia de usuario
+    select id_usuario into id_u
+    from usuario
+    where id_usuario = usuario_id;
+
     genero_id := fn_obten_id_genero(genero_u);
     pais_id := fn_obten_id_pais(pais_u);
     tipo_id := fn_obten_id_tipo_usuario(tipo_u);
@@ -468,10 +474,12 @@ begin
         where id_usuario = usuario_id;
 
     commit;
-    updated := usuario_id;
+    updated := usuario_id; -- usuario actualizado
 exception
+    when no_data_found then -- usuario no existe
+        updated := -1;
     when others then
-        updated := 0;
+        updated := 0; -- error al actualizar
 end;
 
 /

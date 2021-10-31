@@ -68,7 +68,7 @@ begin
     commit;
     updated := usuario_id; -- usuario actualizado
 exception
-    when no_data_found then
+    when no_data_found then -- usuario no existe
         updated := -1;
     when others then
         updated := 0; -- error al actualizar
@@ -81,11 +81,13 @@ declare
     id_usuario turismo_real.usuario.id_usuario%type;
     updated number;
 begin
-    id_usuario := 6;
+    id_usuario := 55;
     sp_editar_usuario(id_usuario,'154256545',null,null,'Sharon','Clementine','Mclean','Mendoza','06/04/1989','s.clementine@gmail.com','+56911112222',null,'femeNINO','Argentina','clienTE','sin comunA','Los Dolares','1999',null,'25B',updated);
 
     if updated > 0 then
         dbms_output.put_line('Usuario Actualizado.');
+    elsif updated = -1 then
+        dbms_output.put_line('No existe usuario con id '||id_usuario);
     else
         dbms_output.put_line('Error al actualizar usuario.');
     end if;

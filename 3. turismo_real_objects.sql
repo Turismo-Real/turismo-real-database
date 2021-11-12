@@ -53,6 +53,7 @@ drop procedure sp_obten_tipo_mantencion;
 drop procedure sp_obten_estados_mantencion;
 drop procedure sp_obten_tipos_gasto;
 drop procedure sp_obten_tipos_pago;
+drop procedure sp_obten_asistentes_reserva;
 
 /
 
@@ -1288,6 +1289,22 @@ begin
 exception
     when no_data_found then updated := -1; -- NO EXISTE USUARIO
     when others then updated := 0; -- ERROR AL ACTUALIZAR
+end;
+
+/
+
+-- SP OBTEN ASISTENTES DE RESERVA
+create or replace procedure sp_obten_asistentes_reserva(
+    reserva_id in number,
+    asistentes out sys_refcursor
+) is begin
+    open asistentes for
+        select
+            pasaporte, numrut_asistente, dvrut_asistente,
+            pnombre_asistente, snombre_asistente, apepat_asistente,
+            apemat_asistente, correo_asistente
+        from asistente_reserva join asistente using(id_asistente)
+        where id_reserva = reserva_id;
 end;
 
 /

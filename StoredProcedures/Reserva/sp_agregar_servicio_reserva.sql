@@ -6,6 +6,7 @@ create or replace procedure sp_agregar_servicio_reserva(
     saved out number
 )is
     servicio_reserva_id turismo_real.servicio_reserva.id_servicio_reserva%type;
+    valor_servicio turismo_real.servicio.valor%type;
     existe_reserva number;
     existe_servicio number;
     existe_r_y_s number; -- pareja reserva-servicio
@@ -23,13 +24,17 @@ begin
     and id_reserva = reserva_id;
     
     if existe_reserva > 0 and existe_servicio > 0 and existe_r_y_s = 0 then
+        -- obten valor actual servicio
+        select valor into valor_servicio
+        from servicio
+        where id_servicio = servicio_id;
         -- obtener id servicio-reserva
         servicio_reserva_id := seq_servicio_reserva.nextval;
         -- insertar servicio reserva
         insert into servicio_reserva(id_servicio_reserva,valor,id_servicio,id_conductor,id_reserva)
-            values(servicio_reserva_id,valor,servicio_id,conductor_id,reserva_id);
+            values(servicio_reserva_id,valor_servicio,servicio_id,conductor_id,reserva_id);
         commit;
-        saved := 1; -- SERVICIO AGREGADO
+        saved := servicio_reserva_id; -- SERVICIO AGREGADO
     else
         if existe_reserva = 0 then
             saved := -1; -- NO EXISTE RESERVA
@@ -42,7 +47,6 @@ begin
 exception
     when others then saved := 0; -- ERROR AL AGREGAR SERVICIO
 end;
-
 
 -- PRUEBA SP
 declare

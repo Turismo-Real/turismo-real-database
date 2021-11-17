@@ -16,6 +16,7 @@ drop function fn_caclular_total_arriendo;
 drop function fn_obten_depto;
 drop function fn_obten_valor_arriendo;
 drop function fn_obten_cliente;
+drop function fn_obten_id_estado_reserva;
 
 drop procedure sp_agregar_usuario;
 drop procedure sp_editar_usuario;
@@ -55,6 +56,9 @@ drop procedure sp_obten_tipos_gasto;
 drop procedure sp_obten_tipos_pago;
 drop procedure sp_obten_asistentes_reserva;
 drop procedure sp_obten_servicios_reserva;
+drop procedure sp_cambiar_password;
+drop procedure sp_check_in;
+drop procedure sp_check_out;
 
 /
 

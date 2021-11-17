@@ -5,8 +5,12 @@ create or replace procedure sp_obten_servicios_reserva(
 ) is begin
     open servicios for
         select
-            id_servicio_reserva, id_servicio, nombre_servicio,
-            tipo_servicio, sr.valor, id_conductor
+            id_servicio_reserva as id_res_serv,
+            id_servicio,
+            nombre_servicio as nombre_s,
+            tipo_servicio as tipo_s,
+            sr.valor as valor_s,
+            id_conductor
         from servicio_reserva sr join servicio s using(id_servicio)
         join tipo_servicio ts using(id_tipo_servicio)
         where id_reserva = reserva_id;

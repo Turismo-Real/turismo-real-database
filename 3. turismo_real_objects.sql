@@ -54,6 +54,7 @@ drop procedure sp_obten_estados_mantencion;
 drop procedure sp_obten_tipos_gasto;
 drop procedure sp_obten_tipos_pago;
 drop procedure sp_obten_asistentes_reserva;
+drop procedure sp_obten_servicios_reserva;
 
 /
 
@@ -1304,6 +1305,22 @@ create or replace procedure sp_obten_asistentes_reserva(
             pnombre_asistente, snombre_asistente, apepat_asistente,
             apemat_asistente, correo_asistente
         from asistente_reserva join asistente using(id_asistente)
+        where id_reserva = reserva_id;
+end;
+
+/
+
+-- SP OBTENER SERVICIOS DE RESERVA
+create or replace procedure sp_obten_servicios_reserva(
+    reserva_id in number,
+    servicios out sys_refcursor
+) is begin
+    open servicios for
+        select
+            id_servicio_reserva, id_servicio, nombre_servicio,
+            tipo_servicio, sr.valor, id_conductor
+        from servicio_reserva sr join servicio s using(id_servicio)
+        join tipo_servicio ts using(id_tipo_servicio)
         where id_reserva = reserva_id;
 end;
 

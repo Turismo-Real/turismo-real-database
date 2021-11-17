@@ -59,6 +59,7 @@ drop procedure sp_obten_servicios_reserva;
 drop procedure sp_cambiar_password;
 drop procedure sp_check_in;
 drop procedure sp_check_out;
+drop procedure sp_agregar_servicio_reserva;
 
 /
 
@@ -1330,6 +1331,53 @@ create or replace procedure sp_obten_servicios_reserva(
         from servicio_reserva sr join servicio s using(id_servicio)
         join tipo_servicio ts using(id_tipo_servicio)
         where id_reserva = reserva_id;
+end;
+
+/
+
+-- SP AGREGAR SERVICIO RESERVA
+create or replace procedure sp_agregar_servicio_reserva(
+    reserva_id in number,
+    servicio_id in number,
+    conductor_id in number,
+    saved out number
+)is
+    servicio_reserva_id turismo_real.servicio_reserva.id_servicio_reserva%type;
+    existe_reserva number;
+    existe_servicio number;
+    existe_r_y_s number; -- pareja reserva-servicio
+begin
+    -- verificar id reserva
+    select count(*) into existe_reserva
+    from reserva where id_reserva = reserva_id;
+    -- verificar id servicio
+    select count(*) into existe_servicio
+    from servicio where id_servicio = servicio_id;
+    -- verificar existencia id_r && id_s
+    select count(*) into existe_r_y_s
+    from servicio_reserva
+    where id_servicio = servicio_id
+    and id_reserva = reserva_id;
+    
+    if existe_reserva > 0 and existe_servicio > 0 and existe_r_y_s = 0 then
+        -- obtener id servicio-reserva
+        servicio_reserva_id := seq_servicio_reserva.nextval;
+        -- insertar servicio reserva
+        insert into servicio_reserva(id_servicio_reserva,valor,id_servicio,id_conductor,id_reserva)
+            values(servicio_reserva_id,valor,servicio_id,conductor_id,reserva_id);
+        commit;
+        saved := 1; -- SERVICIO AGREGADO
+    else
+        if existe_reserva = 0 then
+            saved := -1; -- NO EXISTE RESERVA
+        elsif existe_servicio = 0 then
+            saved := -2; -- NO EXISTE SERVICIO
+        elsif existe_r_y_s = 1 then
+            saved := -3; -- YA EXISTE PAREJA RESERVA-SERVICIO
+        end if;
+    end if;
+exception
+    when others then saved := 0; -- ERROR AL AGREGAR SERVICIO
 end;
 
 /

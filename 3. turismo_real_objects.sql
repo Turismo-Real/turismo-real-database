@@ -17,6 +17,7 @@ drop function fn_obten_depto;
 drop function fn_obten_valor_arriendo;
 drop function fn_obten_cliente;
 drop function fn_obten_id_estado_reserva;
+drop function fn_existe_asistente;
 
 drop procedure sp_agregar_usuario;
 drop procedure sp_editar_usuario;
@@ -348,6 +349,28 @@ exception
         return 0; -- NO EXISTE ID CLIENTE
     when others then
         return 0; -- ERROR
+end;
+
+/
+
+-- FN EXISTE ASISTENTE
+create or replace function fn_existe_asistente(
+    pasaporte_a in varchar,
+    rut_a in varchar
+) return number is
+    asistente_id turismo_real.asistente.id_asistente%type;
+begin
+    select id_asistente into asistente_id
+    from asistente
+    where pasaporte = pasaporte_a
+    or numrut_asistente = rut_a;
+    
+    return asistente_id; -- RETORNA ID ASISTENTE
+exception
+    when no_data_found then
+        return 0; -- ASISTENTE NO ENCONTRADO
+    when others then
+        return -1; -- ERROR
 end;
 
 /

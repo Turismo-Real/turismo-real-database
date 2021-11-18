@@ -7,6 +7,8 @@ create or replace procedure sp_agregar_servicio_reserva(
 )is
     servicio_reserva_id turismo_real.servicio_reserva.id_servicio_reserva%type;
     valor_servicio turismo_real.servicio.valor%type;
+    id_c turismo_real.conductor.id_conductor%type;
+    existe_conductor number;
     existe_reserva number;
     existe_servicio number;
     existe_r_y_s number; -- pareja reserva-servicio
@@ -30,9 +32,20 @@ begin
         where id_servicio = servicio_id;
         -- obtener id servicio-reserva
         servicio_reserva_id := seq_servicio_reserva.nextval;
+        -- comprobar existencia conductor
+        select count(*) into existe_conductor
+        from conductor
+        where id_conductor = conductor_id;
+        
+        if existe_conductor = 0 then
+            id_c := null;
+        else
+            id_c := conductor_id;
+        end if;
+        
         -- insertar servicio reserva
         insert into servicio_reserva(id_servicio_reserva,valor,id_servicio,id_conductor,id_reserva)
-            values(servicio_reserva_id,valor_servicio,servicio_id,conductor_id,reserva_id);
+            values(servicio_reserva_id,valor_servicio,servicio_id,id_c,reserva_id);
         commit;
         saved := servicio_reserva_id; -- SERVICIO AGREGADO
     else
@@ -55,9 +68,9 @@ declare
     conductor_id turismo_real.conductor.id_conductor%type;
     saved number;
 begin
-    reserva_id := 2;
-    servicio_id := 1;
-    conductor_id := 1;
+    reserva_id := 29;
+    servicio_id := 2;
+    conductor_id := 0;
     sp_agregar_servicio_reserva(reserva_id,servicio_id,conductor_id,saved);
     
     if saved > 0 then

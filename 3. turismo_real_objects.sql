@@ -18,6 +18,7 @@ drop function fn_obten_valor_arriendo;
 drop function fn_obten_cliente;
 drop function fn_obten_id_estado_reserva;
 drop function fn_existe_asistente;
+drop function fn_agregar_asistente;
 
 drop procedure sp_agregar_usuario;
 drop procedure sp_editar_usuario;
@@ -371,6 +372,26 @@ exception
         return 0; -- ASISTENTE NO ENCONTRADO
     when others then
         return -1; -- ERROR
+end;
+
+/
+
+-- FN AGREGAR ASISTENTE
+create or replace function fn_agregar_asistente(
+    pasaporte_a in varchar,
+    numrut_a in varchar, dvrut_a in varchar,
+    pnom_a in varchar, snom_a in varchar,
+    pape_a in varchar, sape_a in varchar, correo_a in varchar
+) return number is
+    new_id turismo_real.asistente.id_asistente%type;
+begin
+    new_id := seq_asistente.nextval;
+    insert into asistente(id_asistente,pasaporte,numrut_asistente,dvrut_asistente,pnombre_asistente,snombre_asistente,apepat_asistente,apemat_asistente,correo_asistente)
+    values (new_id,pasaporte_a,numrut_a,dvrut_a,pnom_a,snom_a,pape_a,sape_a,correo_a);
+    commit;
+    return new_id; -- ASISTENTE AGREGADO
+exception
+    when others then return 0; -- ERROR AL AGREGAR
 end;
 
 /

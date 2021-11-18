@@ -1457,9 +1457,8 @@ begin
     if existe_reserva > 0 then -- existe reserva
         -- comprobar existencia asistente
         asistente_id := fn_existe_asistente(pasaporte, numrut);
-        dbms_output.put_line('existe reserva');
+
         if asistente_id = 0 then -- no existe asistente
-            dbms_output.put_line('no existe asistente');
             asistente_id := fn_agregar_asistente(pasaporte,numrut,dvrut,pnombre,snombre,papellido,sapellido,correo);
         end if;
         
@@ -1469,7 +1468,6 @@ begin
         where id_reserva = reserva_id and id_asistente = asistente_id;
         
         if existe_reserva_asistente = 0 then -- no existe par asistente-reserva
-            dbms_output.put_line('No existe par');
             if asistente_id > 0 then
                 -- obtener id asistente-reserva
                 id_a_r := seq_asistente_reserva.nextval;

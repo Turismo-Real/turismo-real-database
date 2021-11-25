@@ -63,6 +63,9 @@ drop procedure sp_check_in;
 drop procedure sp_check_out;
 drop procedure sp_agregar_servicio_reserva;
 drop procedure sp_agregar_asistente_reserva;
+drop procedure sp_agregar_imagen;
+drop procedure sp_obten_imagenes_depto;
+drop procedure sp_eliminar_imagen_depto;
 
 /
 

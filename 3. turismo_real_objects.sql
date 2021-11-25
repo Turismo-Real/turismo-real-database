@@ -1542,4 +1542,29 @@ end;
 
 /
 
+-- SP ELIMINAR IMAGEN
+create or replace procedure sp_eliminar_imagen_depto(
+    imagen_id in number,
+    deleted out number
+) is
+    existe_imagen number;
+begin
+    -- comprobar existencia de imagen
+    select count(*) into existe_imagen
+    from imagen where id_imagen = imagen_id;
+
+    if existe_imagen > 0 then
+        delete from imagen
+        where id_imagen = imagen_id;
+        commit;
+        deleted := 1; -- IMAGEN ELIMINADA
+    else
+        deleted := -1; -- NO EXISTE IMAGEN
+    end if;
+exception
+    when others then deleted := 0; -- ERROR
+end;
+
+/
+
 commit;

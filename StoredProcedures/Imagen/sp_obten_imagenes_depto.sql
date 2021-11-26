@@ -6,5 +6,6 @@ create or replace procedure sp_obten_imagenes_depto(
     open imagenes for
         select id_imagen, nombre, formato, imagen
         from imagen
-        where id_departamento = depto_id;
+        where id_departamento = depto_id
+        order by id_imagen;
 end;

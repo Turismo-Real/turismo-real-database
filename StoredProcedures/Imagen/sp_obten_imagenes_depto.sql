@@ -4,7 +4,7 @@ create or replace procedure sp_obten_imagenes_depto(
     imagenes out sys_refcursor
 ) is begin
     open imagenes for
-        select id_imagen, formato, imagen
+        select id_imagen, nombre, formato, imagen
         from imagen
         where id_departamento = depto_id;
 end;

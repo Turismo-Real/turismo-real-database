@@ -1,6 +1,7 @@
 -- SP AGREGAR IMAGEN
 create or replace procedure sp_agregar_imagen(
     depto_id in number,
+    nombre_i in varchar,
     formato_i in varchar,
     imagen_i in blob,
     saved out number
@@ -13,8 +14,8 @@ begin
 
     if id_d > 0 then
         imagen_id := seq_imagen.nextval;
-        insert into imagen(id_imagen, id_departamento, formato, imagen)
-        values (imagen_id, depto_id, formato_i, imagen_i);
+        insert into imagen(id_imagen, id_departamento, nombre, formato, imagen)
+        values (imagen_id, depto_id, nombre_i, formato_i, imagen_i);
         commit;
         saved := imagen_id; -- IMAGEN GUARDADA
     else
